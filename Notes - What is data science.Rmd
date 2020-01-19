@@ -1,0 +1,71 @@
+---
+title: "What is Data Science?"
+output:
+  html_document:
+    df_print: paged
+---
+# 1 - Week 1 (Data Science Fundamentals)
+## 1.1 - What is Data Science?
+A data scientist is somewhat that uses data to answer questions.
+
+In the toolbox to a data scientists there are two main aspects important.
+
+
+* Math and statistical knowledge - Analyze data (statistics, mathematics, data visualization)
+* Programming - Data cleaning and formating
+
+
+Data scientist can be defined as someone who:
+
+
+> “who combines the skills of software programmer, statistician and storyteller slash artist to extract the nuggets of gold hidden under mountains of data”
+
+
+## 1.2 - What is data?
+Data is this according to cambrige dictionary:
+
+> Information, especially facts or numbers collected to be examined and considered and used to help decision making
+
+
+or this according to wikipedia:
+
+> A set of values of qualitative or quantitative variables
+
+Which can be defines as this
+
+
+* Set of values: The populations you are trying to discover
+* Variable: Measuyrment or characteristics of an item - Qualativie or quantitative
+
+
+Types of data sources can include:
+
+
+* Sequencing data - Often in FASQ format and can be very messy.
+* Country wide sencesus - Alot of missing stuff.
+* Images - Information can be coded inside images - Facebook can recognize faces in a image.
+
+## 1.3 - Getting help
+Strategies to get help when you are stuck. There are several places where you can get help.
+
+
+* Stackoverflow
+* Cross Validated
+* Coursera forum
+
+
+## 1.4 - The data science process
+What an actual science project looks like. 
+
+1. Question to be anaswered
+2. finding or generating data
+3. Data analyses
+4. Data presentation
+
+
+
+
+
+
+
+
