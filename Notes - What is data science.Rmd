@@ -65,7 +65,13 @@ What an actual science project looks like.
 
 
 
+# 2 - Week 2 (R and R studio)
+## 2.1 -Installing R?
+The browseVingettes function often gives alot of good data and instruction how to use packages.
 
 
+```{r}
+browseVignettes("package")
+```
 
 
