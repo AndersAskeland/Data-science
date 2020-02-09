@@ -1,0 +1,177 @@
+---
+title: "Notes - The Data Scientist's Toolbox"
+output:
+  html_document:
+    df_print: paged
+---
+# 1 - Week 1 (Data Science Fundamentals)
+## 1.1 - What is Data Science?
+A data scientist is somewhat that uses data to answer questions.
+
+In the toolbox to a data scientists there are two main aspects important.
+
+
+* Math and statistical knowledge - Analyze data (statistics, mathematics, data visualization)
+* Programming - Data cleaning and formating
+
+
+Data scientist can be defined as someone who:
+
+
+> “who combines the skills of software programmer, statistician and storyteller slash artist to extract the nuggets of gold hidden under mountains of data”
+
+
+## 1.2 - What is data?
+Data is this according to cambrige dictionary:
+
+> Information, especially facts or numbers collected to be examined and considered and used to help decision making
+
+
+or this according to wikipedia:
+
+> A set of values of qualitative or quantitative variables
+
+Which can be defines as this
+
+
+* Set of values: The populations you are trying to discover
+* Variable: Measuyrment or characteristics of an item - Qualativie or quantitative
+
+
+Types of data sources can include:
+
+
+* Sequencing data - Often in FASQ format and can be very messy.
+* Country wide sencesus - Alot of missing stuff.
+* Images - Information can be coded inside images - Facebook can recognize faces in a image.
+
+## 1.3 - Getting help
+Strategies to get help when you are stuck. There are several places where you can get help.
+
+
+* Stackoverflow
+* Cross Validated
+* Coursera forum
+
+
+## 1.4 - The data science process
+What an actual science project looks like. 
+
+1. Question to be anaswered
+2. finding or generating data
+3. Data analyses
+4. Data presentation
+
+
+
+
+# 2 - Week 2 (R and R studio)
+## 2.1 -Installing R?
+The browseVingettes function often gives alot of good data and instruction how to use packages.
+
+
+```{r}
+browseVignettes("package")
+```
+
+
+# 3 - Week 3 (Git and github)
+Not much to learn here
+
+
+# 4 - Week 4 (R Markdown, Scientific Thinking, and Big Data)
+## 4.1 - R markdown
+Not much here
+
+## 4.2 - Types of Data science questions
+There are 6 types of data analysis - according to difficulty they are!
+
+1. Descriptive
+2. Exploratory
+3. Inferential
+4. Predictive
+5. Causal
+6. Mechanastic
+
+
+### Descriptive data analysis
+***Goal:*** Describe or summarize data.
+
+* Early analysis
+* Simple summaries
+* NOT for generalizating something about a larger population
+
+Examples: Mean, mode, median, range, SD or variance.
+
+
+### Exploritary data analysis
+***Goal:*** Examine data and find relationships which werent known.
+
+* Explore how variables can be related
+* Useful in discovering new connections
+* Help to formulate hypotheses.
+
+Note: Correlation does not imply causation!
+
+Never used as the final say in anything.
+
+All exploritary analysis can say is that a relationship exsists - not why and how,
+
+
+### Inferential analysis
+***Goal:*** Use a small sample of data to say someting about the population
+
+* Provide estimate of variables for population and the uncertainty of this
+* Ability to do this depends on your data quality - Shit in - Shit out.
+
+
+### Predictive analysis
+***Goal:*** Use current and hisotical data to make predictions of future
+
+* Accuracy is dependent on having the correct variables
+* There are many ways to build up predictions (many methods)
+
+Still. Correlation does not equal causation.
+
+
+### Causal analysis
+***Goal:*** See what happens to one variable when we manipulate another variables
+
+* Gold standard in data analysis
+* often applied to the results of randomized studies to identify causation
+* Usually analysed in aggregate and observed relationships are usually average effects
+
+
+### Mechanistic analysis
+***Goal:*** Understand the exact changes that leads to other changes
+
+* Very difficult.
+* Commonly applied to physical or engineering sciencies
+** Biological samples are usually way to messy for this
+
+
+## 4.3 - Experimental design
+The workflor for an experimental design is:
+
+Formulate question --> Design expeiment --> identify sources of error --> Collect data
+
+
+There are many varialbes involved in the outcome of ones experiment
+* Independent variable = Variable that experimenter manipulattes - Does not depend on the other variables being meausred. - Often displayed on x-axis.
+* Dependent variable = Depends on independent varialbe. Often shown on y-axis.
+
+Example of confounder:
+Age is a confounder of literacy but also shoe size. - You could adjust based on age, or only use a specific age group.
+
+
+Replication is also important
+
+## 4.4 - Big data
+Big data is:
+* Volume - Alot of it
+* Velocity - constantly updating
+* Varaity - What source is best suited?
+* Unstructured - With the emergence of big data, data is now often unstructurred (missing values etc), compared to structured data.
+
+
+Many questions often benefit of very large data sets. 
