@@ -1,6 +1,10 @@
 ---
 title: "Chapter 1 - Data Visualization"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
 ---
 # Load packages
 ```{r}
