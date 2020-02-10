@@ -1,0 +1,186 @@
+---
+title: "Chapter 3 - Data Visulisation"
+output: html_notebook
+---
+# Load packages
+```{r}
+library(tidyverse)
+```
+
+
+# 3.1 - Introduction
+## 3.1.2 - Notes
+Only talks about prerequisites
+
+# 3.2 - First steps
+## 3.2.1 - Notes
+We are using the MPG data set. This comes with the tidyverse package.
+
+A standard graphing template is as follows.
+
+```{r}
+ggplot(data = <DATA>) +
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+## 3.2.2 - Excersises
+**1 - Run ggplot on mpg. What do you see?**
+
+I run ggplot on mpg:
+
+```{r}
+ggplot (data = mpg)
+```
+
+Doing this I see nothing. I need to define what I want to see
+
+**2 - How many rows and columns are in mpg?**
+
+I can find this using the str function, or altenativly glimpse. Or just writing the data in the console.
+
+```{r}
+str(mpg)
+glimpse(mpg)
+mpg
+```
+
+
+It is 234 rows and 11 columns.
+
+**3 - what does the dr variable describe?**
+
+I can find this by looking trough the documentation.
+```{r}
+?mpg
+```
+
+drv describes whether the car is f (front wheel drive), r (rear wheel drive), or 4 (4wd)
+
+**4 - make a scatterplot of hwy vs cyl**
+
+I can do that using the following.
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = cyl, y = hwy))
+```
+
+**5 - What happens if you make a scatterplot of class vs drv? Why is it not useful?**
+
+This happens:
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = (aes(x = class, y = drv)))
+```
+
+This is not useful as the type of wheel setup (drv) is not dependent on type of car. One would expect.
+
+
+# 3.3 - Aesthetic mappings
+## 3.3.1 - Notes
+Lets you highlight specific stuff. Astetics includes things like size, shape and color. One can use aestetic mapping like this.
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+Doing this will automatically assign a unique "level" of asthetic (color) tp each unique value in the chosen variable (in this case: car class).
+
+Here is the same example, using size instead.
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, size = class))
+```
+ This gives us a different asthetic, however, in this case it looks real messy. Other things we can map to is:
+ 1. alpha = transperasy
+ 2. shape = shape
+ 
+ We can also set astetics manually like this.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+```
+Notice that the color is outside of the x and y parentheses, but still inside the aes.
+ 
+You can look up information on the types of shapes that are avaliable in R. There is a total of 25.
+ 
+## 3.3.2 - Excersises
+**1 - What's gone wrong with this code? Why are the points not blue?**
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
+Answer: Because the decleration for blue points are inside the x and Y parentheses, which creates a new variable in MPG called blue, which R attempts to color.
+
+**2 - Which variables in mpg are chatogorical and continious?**
+
+We can figure this out by looking at the documentation.
+```{r}
+?mpg
+```
+
+It is somewhat difficult to look at the documentation. It is best to look at a printed data frame.
+```{r}
+mpg
+```
+
+Here we can see <chr> which stands for chategorical and <dbl> or <int> which stand continuous. dbl is double precision vectors, or double - from C. I.E. a long float.
+
+**3 - Map a continuous variable to color, size, and shape and look how they behave compared to chategorical values**
+
+I 
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = drv, y = hwy, color = year, size = cyl))
+```
+First it tells me that a continuous variable cant be mapped to shape. This makes sense.
+
+As for colour, it creates a gradient when used with continous variables. Size also work with continous variables, however, is not as good and rather scales the variables instead of having discrete sizes.
+
+
+**4 - What happens if you map the same variable to multiple asthetics?**
+
+Lets try.
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = drv, y = hwy, color = trans, shape = trans))
+```
+Both things are mapped.
+
+**5 - What does the stroke aesthetic do? What shapes does it work with?**
+
+I can see this by looking at the documentation of geom_point.
+```{r}
+?geom_point
+```
+
+
+Stroke can modify the with of the border.
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = drv, y = hwy, color = year, size = cyl, stroke = cyl))
+```
+It can also do this:
+```{r}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(shape = 21, colour = "black", fill = "white", size = 5, stroke = 5)
+```
+
+
+**6 - What happens if you map an aesthetic to something other than a variable name?**
+
+Lets find out
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = drv, y = hwy, color = displ < 5))
+```
+
+You can get logical statements when doing this.
+
+# 3.4 - Common problems
+## 3.4.1 - Notes
+
+## 3.4.1 - Excerises
+
