@@ -10,7 +10,6 @@ polluteantmean <- function(directory, pollutant, id)
   ## Sets variables i calculate mean on
   count <- 0
   sum <- 0
-
   ## Itterate over all Ids
   for (i in seq_along(id)) 
   {
