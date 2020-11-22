@@ -25,4 +25,4 @@ avacado_data %>%
   theme_fivethirtyeight() + #Set themes
   theme(axis.title = element_text(), text = element_text(family = "Roboto"))+
   scale_linetype_manual(values = c("dashed", "solid"), guide = "none") + # Sets which should be dashed
-  scale_color_manual(values = my_colors) # color palatte 
+  scale_color_manual(values = my_colors) # color palatte
