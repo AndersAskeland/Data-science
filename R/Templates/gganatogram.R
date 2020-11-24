@@ -1,5 +1,7 @@
-# Libraries
+# Install packages
 devtools::install_github("jespermaag/gganatogram")
+
+# Load packages
 library(gganatogram)
 library(dplyr)
 library(viridis)
@@ -21,6 +23,7 @@ organPlot2 <- data.frame(organ = "liver",
                         colour = "orange", 
                         value = 100, 
                         stringsAsFactors=F)
+
 gganatogram(data=organPlot2, fillOutline='#a6bddb', organism='human', sex='male', fill="colour")
 
 # Compare groups
