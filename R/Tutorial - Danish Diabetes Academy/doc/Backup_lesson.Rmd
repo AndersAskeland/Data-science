@@ -1,0 +1,327 @@
+---
+title: "Lesson"
+author: "Anders"
+output: html_document
+---
+
+# 1. Importing my data usring vroom
+As I understand vroom is just an automated readr. 
+
+```{r setup, include=FALSE}
+library(vroom)
+library(here)
+library(dplyr)
+library(purrr)
+library(fs)
+library(tidyverse)
+```
+
+This is a example of how to do it. We first create a reference to the dir, look at the data using spec, and import is using vroom. We manually specify the different column types.
+
+```{r}
+# Data dir
+user_1_info_file <- here("data-raw/mmash/user_1/user_info.csv")
+
+# Load data first
+vroom(user_1_info_file) %>%
+  spec()
+
+# Read data
+user_1_info_data <- vroom(user_1_info_file,
+                          col_select = -1,
+                          col_types = cols(
+                            Gender = col_character(),
+                            Weight = col_double(),
+                            Height = col_double(),
+                            Age = col_double()),
+                          .name_repair = snakecase::to_snake_case)
+
+user_1_info_data
+```
+
+
+## Exercise: Import the saliva data
+Same as above
+```{r}
+# Data dir
+user_1_saliva_file <- here("data-raw/mmash/user_1/saliva.csv")
+
+# look at data structure
+vroom(user_1_saliva_file) %>%
+  spec()
+
+# Create final data
+user_1_saliva_data <- vroom(user_1_saliva_file,
+                                 col_select = -1,
+                                 col_types = cols(
+                                   SAMPLES = col_character(),
+                                   `Cortisol NORM` = col_double(),
+                                   `Melatonin NORM` = col_double()),
+                            .name_repair = snakecase::to_snake_case)
+user_1_saliva_data
+```
+
+# 2 - Import larger datasets
+If you have a very big dataset, a good idea could be to read in a few lines (100) using spec() and look at this data prior to attempting to import a larger dataset.
+
+
+```{r}
+# User dir
+user_1_rr_file <- here(("data-raw/mmash/user_1/RR.csv"))
+
+# Find column types
+vroom(user_1_rr_file, n_max = 100) %>%
+  spec()
+
+# Import data
+user_1_rr_data <- vroom(file = user_1_rr_file,
+                        col_select = -1,
+                        col_types = 
+                          cols(
+                              ibi_s = col_double(),
+                              day = col_double(),
+                              time = col_time(format = "")
+                              ),
+                        .name_repair = snakecase::to_snake_case)
+user_1_rr_data
+```
+## Exercise: Import the Actigraph data.
+```{r}
+# User dir
+user_1_Actigraph_file <- here(("data-raw/mmash/user_1/Actigraph.csv"))
+
+# Find column types
+vroom(user_1_Actigraph_file, n_max = 100) %>%
+  spec()
+
+# Import data
+user_1_Actigraph_data <- vroom(file = user_1_Actigraph_file,
+                        col_select = -1,
+                        col_types = 
+                          cols(
+  Axis1 = col_double(),
+  Axis2 = col_double(),
+  Axis3 = col_double(),
+  Steps = col_double(),
+  HR = col_double(),
+  `Inclinometer Off` = col_double(),
+  `Inclinometer Standing` = col_double(),
+  `Inclinometer Sitting` = col_double(),
+  `Inclinometer Lying` = col_double(),
+  `Vector Magnitude` = col_double(),
+  day = col_double(),
+  time = col_time(format = "")
+                          ),
+                        .name_repair = snakecase::to_snake_case)
+user_1_Actigraph_data
+```
+
+# 3 - Functions
+The functions are pasted tp the function R script.
+
+My loops are bad. So we are going to use map to create a loop instead.
+# 4 - Load data 
+Data is loaded manually
+```{r }
+# List (create a vector) of all files that containe (regexpr) specific string in a specified folder.
+user_info_files <- dir_ls(here("data-raw/mmash/"), 
+                          regexp = "user_info.csv", 
+                          recurse = TRUE)
+# Function
+user_info_df <- map_dfr(user_info_files, import_user_info, .id = "file_path_id") %>%
+  extract_user_id()
+```
+
+Data is loaded using a function
+```{r}
+# I have not made a function for this.
+```
+
+
+## Exercise: Map on the other datasets
+
+A better way, where it the columns are controlled for. Is based on function extract_data which check the data
+
+
+Here the datasets are imported
+```{r}
+saliva_df <- import_multiple_files_new("saliva")
+rr_df <- import_multiple_files_new("RR")
+actigraph_df <- import_multiple_files_new("Actigraph")
+```
+
+
+# Using regex for user ID
+```{r}
+# Way one
+user_info_df %>% 
+  mutate(user_id = str_extract(file_path_id, "user_[:digit:][:digit:]?"), .keep = "unused")
+
+# Alternative
+user_info_df %>% 
+  mutate(user_id = str_extract(file_path_id, "user_[:digit:][:digit:]?")) %>% 
+  select(-file_path_id)
+
+# Do using function
+extract_user_id(df = user_info_df)
+```
+
+
+# Join datasets
+
+```{r}
+full_join(user_info_df, saliva_df, by = "user_id")
+```
+
+# We can add multiple columns using reduce
+Full code
+first <- add_numbers(1,2)
+second <- add_numbers(first,3)
+third <- add_numbers(second,4)
+forth <- add_numbers(thir, 5)
+
+Using reduce
+reduce(1:4, add_numbers)
+
+```{r}
+combined_data <- reduce(list(user_info_df, saliva_df, actigraph_df, rr_df), full_join, by = "user_id")
+```
+```{r}
+# Only age
+user_info_df %>% 
+  select(age)
+
+# All characters
+user_info_df %>% 
+  select(where(is.character))
+
+# Summarize stuff
+saliva_df %>% summarise(cortisol_mean = mean(cortisol_norm))
+
+saliva_df %>% 
+  summarise(cortisol_mean = mean(cortisol_norm),
+            melatonin_mean = mean(melatonin_norm))
+
+# Use of across function
+saliva_df %>%
+  summarise(across(c(cortisol_norm, melatonin_norm), list(mean = mean), na.rm = T)) 
+
+saliva_df %>% 
+  summarise(across(where(is.numeric), list(mean, sd)))
+  
+# Group by
+rr_df %>% 
+  group_by(user_id, day) %>% # we group by two varibles
+  summarise(across(ibi_s, list(missing = ~sum(is.na(.x)), mean = mean, sd = sd), na.rm = T), .groups = "drop_last")
+
+# You can also drop the error with dplyr.summraise.inform
+options(dplyr.summarise.inform = F)
+```
+Lets combine stuff
+```{r}
+summarised_rr_df <- rr_df %>% 
+  group_by(user_id, day) %>% # we group by two varibles
+  summarise(across(ibi_s, list(mean = mean, sd = sd), na.rm = T), .groups = "drop_last")
+
+```
+
+Combine datasets
+```{r}
+reduce(list(user_info_df, saliva_df, summarised_rr_df), full_join, by = "user_id")
+
+user_info_df %>% mutate(age_category = case_when(age > 20 ~ "old",
+                                                 age <= 20 ~ "young",
+                                                 TRUE ~ NA_character_)) # Avoid mixing of characters with numeric)
+
+
+saliva_with_day_df <- saliva_df %>% 
+  mutate(day = case_when(
+    samples == "before sleep" ~ 1,
+    samples == "wake up" ~ 2,
+    TRUE ~ NA_real_))
+
+reduce(list(user_info_df, saliva_with_day_df, summarised_rr_df), full_join)
+
+
+```
+
+# Exersise
+
+
+```{r sumarised and join arcigraph}
+# Summarise hr and steps
+summarised_actigraph_df <- actigraph_df %>% 
+  group_by(user_id, day) %>% # we group by two varibles
+  summarise(across(c(hr, steps), list(mean = mean, sd = sd, max = max()), na.rm = T), .groups = "drop_last")
+summarised_actigraph_df
+
+# Combine data
+reduce(list(actigraph_df, summarised_actigraph_df), full_join)
+
+```
+
+## Exercise: Importing activitiy data
+```{r}
+# Find and look at data
+### Data dir
+activity_dir <- here("data-raw/mmash/user_1/Activity.csv")
+
+### Load data first
+vroom(activity_dir) %>%
+  spec()
+
+# Extract data using function
+activity_df <- import_multiple_files_new("Activity")
+
+# Look at data
+head(activity_df)
+colnames(activity_df)
+
+# Summarise hr and steps
+activity_df <- activity_df %>% 
+  mutate(activity_seconds = (end-start), .keep = "all")
+
+activity_df %>% 
+  group_by(activity, user_id)
+
+
+
+
+
+
+
+
+summarised_actigraph_df <- actigraph_df %>% 
+  group_by(user_id, day) %>% # we group by two varibles
+  summarise(across(c(hr, steps), list(mean = mean, sd = sd, max = max()), na.rm = T), .groups = "drop_last")
+summarised_actigraph_df
+
+# Combine data
+reduce(list(actigraph_df, summarised_actigraph_df), full_join)
+
+```
+
+```{r}
+activity_df$activity <-  factor(activity_df$activity, levels = c(1:12), labels = c("Low", "High", "Test", "4", "5", "6", "7", "8", "9", "10", "11", "12"))
+```
+)
+
+
+
+```{r}
+# import data
+user_info_df <- import_multiple_files_new("info")
+saliva_df <- import_multiple_files_new("saliva")
+rr_df <- import_multiple_files_new("RR")
+actigraph_df <- import_multiple_files_new("Actigraph")
+
+# Summarise RR data
+summarised_rr_df <- rr_df %>% 
+  group_by(user_id, day) %>% # we group by two varibles
+  summarise(across(ibi_s, list(mean = mean, sd = sd), na.rm = T), .groups = "drop_last")
+
+# Mutate saliva data
+
+
+```
+

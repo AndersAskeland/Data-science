@@ -1,0 +1,98 @@
+---
+title: "Lesson"
+author: "Anders"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+library(vroom)
+library(here)
+library(dplyr)
+library(magrittr)
+library(fs)
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)
+devtools::load_all()
+```
+
+## 1 - Split-Apply-Combine
+This s technique for taking a dataset. Splitting it up for something (i.e. male/female). Doing something to it, and bringing it back. 
+
+* Split = Split data into groups
+* Apply = you do something to data based on the split
+* Combine = Combine the data back up
+
+```{r, warning = FALSE}
+mmash %>% 
+  group_by(day) %>% 
+  summarise(across(
+    c(age, weight, height),
+    list(mean = mean, sd = sd, max = max, min = min),
+    na.rm = T
+  ))
+```
+
+## 2 - Pivot longer
+
+```{r}
+mmash %>% 
+  select(-samples) %>%
+  pivot_longer(c(-user_id, -day, -gender))
+```
+
+Use pivot_longer() after the group_by() and summarise() we did previously:
+```{r}
+# Data
+mmash %>% 
+    group_by(day) %>% 
+    summarise(across(
+        c(age, weight),
+        list(mean = mean, sd = sd), 
+        na.rm = TRUE
+    ))
+
+# Pivot
+mmash %>% 
+    group_by(day) %>% 
+    summarise(across(
+        c(age, weight),
+        list(mean = mean, sd = sd), 
+        na.rm = TRUE
+    )) %>%
+  pivot_longer(ends_with(c("mean", "sd")), 
+               names_to = c("names", ".value"),
+               names_sep = "_")
+```
+# Pibot wider
+We can actually utilize pivot_longer function of naming stuff, to enable us to more easially use pivot_wider.
+```{r}
+mmash %>% 
+    group_by(day) %>% 
+    summarise(across(
+        c(age, weight),
+        list(mean = mean, sd = sd), 
+        na.rm = TRUE
+    )) %>%
+  pivot_longer(ends_with(c("mean", "sd")),
+               names_to = c("names", "summary_statistic"),
+               names_sep = "_") %>%
+  pivot_wider(names_from = summary_statistic,
+              values_from = value)
+```
+
+Do it using  a funciton
+```{r}
+tidy_summarize_by_day(mmash, c("age", "weight"))
+tidy_summarize_by_day(mmash, c(age, weight))
+
+```
+Non-standard evaluation is the thing with {{}}
+
+# You can make a tables in HTML using the kable function in the knitr package
+```{r}
+tidy_summarize_by_day(mmash, c(age, weight)) %>% 
+  knitr::kable(caption = "Nice table")
+```
+
