@@ -1,2 +1,2 @@
-# Data_science
-Notes and exercises related to me learning data science with R and Python
+# Data Science
+Notes and exercises related to data science.
