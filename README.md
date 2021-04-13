@@ -1,2 +1,2 @@
 # Data Science
-Notes and exercises related to data science.
+Notes and code related to data science.
