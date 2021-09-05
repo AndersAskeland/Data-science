@@ -1,8 +1,13 @@
 library(shiny)
 library(shinyFiles)
 library(fs)
+library(RCurl)
 source("functions.R")
 
+
+############################################################
+###################  User interface (UI) ###################
+############################################################
 ui_new <- fluidPage(
     # Main project title
     titlePanel("REDCap - Transfer records between arms"),
@@ -10,6 +15,8 @@ ui_new <- fluidPage(
     # Define layout
     fluidRow(
         # Row 1 - Select record
+        h3("  1 - Select record"),
+
         column(3, wellPanel(
             # Subtitle
             h3("1 - Select record"),
@@ -30,7 +37,7 @@ ui_new <- fluidPage(
             uiOutput("select_id"),
 
         )),
-        # Row 1 - Select record
+        # Row 2 - Storage locatio
         column(3, wellPanel(
             # Subtitle
             h3("2 - Transfer settings"),
@@ -40,58 +47,26 @@ ui_new <- fluidPage(
             verbatimTextOutput("directorypath"),
 
         )),
-        column(4, mainPanel(h1("introducing shiny")))
-    )
-)
+        column(3, wellPanel(
+            # Subtitle
+            h3("2 - Transfer settings")
+))))
 
 
-# Define UI for dataset viewer app ----
-ui <- fluidPage(
-
-    # App title ----
-    titlePanel("REDCap editor"),
-    h4("Transfer participants between study arms"),
-
-    # Sidebar layout with input and output definitions ----
-    sidebarLayout(
-
-        # Sidebar panel for inputs ----
-        sidebarPanel(
-            # Input: Enter API code
-            textInput(inputId = "api",
-                      label = "Enter your API key",
-                      value = "",
-                      placeholder = "Your API key goes here"),
-
-            # Optional text
-            uiOutput("text"),
-
-            # Input: Selector for choosing sudy arm ----
-            uiOutput("study_arm"),
-
-            # Input: Selector for choosing participant ID ----
-            uiOutput("select_id"),
-
-        ),
-
-        # Main panel for displaying outputs ----
-        mainPanel(
-
-            # Output: Formatted text for caption ----
-            h3(textOutput("caption", container = span)),
-
-            # Output: Verbatim text for data summary ----
-            verbatimTextOutput("summary"),
-
-            # Output: HTML table with requested number of observations ----
-            tableOutput("view")
-
-        )
-    )
-)
-
-# Define server logic to summarize and view selected dataset ----
+############################################################
+###################### Server logic ########################
+############################################################
 server <- function(input, output, session) {
+    # Get API
+    observe({
+        if (!check_api(input$api)) {
+            output$text <- renderUI(expr = "Waiting for valid API key")
+            output$study_arm <- renderUI("test")
+            output$select_id <- renderUI("")
+
+        }
+    })
+
     # Set folder
     volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), getVolumes()())
     shinyDirChoose(input, "directory", roots = volumes, session = session, restrictions = system.file(package = "base"))
@@ -106,15 +81,7 @@ server <- function(input, output, session) {
     })
 
 
-    # Get API
-    observe({
-        if (!check_api(input$api)) {
-            output$text <- renderUI(expr = "Waiting for valid API key")
-            output$study_arm <- renderUI("")
-            output$select_id <- renderUI("")
 
-        }
-    })
 
     # Show study arm selector
     observe({
