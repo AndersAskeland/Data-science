@@ -3,17 +3,56 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+3.2 First steps
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+Exercise - 3.2.4 
 
-```{r}
-plot(cars)
-```
+1 - Run ggplot(data = mpg). What do you see?
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+{r}
+ggplot2::ggplot(data = ggplot2::mpg)
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+We see nothing, as we don't have any geom's selected.
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+2 - How many rows are in mpg? How many columns?
+
+{r}
+ggplot2::mpg
+
+There is a total of 234 rows and 11 columns.
+
+3 - What does the drv variable describe? Read the help for ?mpg to find out.
+
+{r}
+?ggplot2::mpg
+
+"drv" is type of drivetrain.
+
+4 - Make a scatterplot of hwy vs cyl.
+
+{r}
+ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = cyl, y = hwy)) +
+  ggplot2::geom_point()
+
+5- What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
+
+{r}
+ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = class, y  = drv)) + 
+  ggplot2::geom_point()
+
+This does not make sense because drive train are not in any way correlated with the type of car. Most types of car have a version with each type of drive train.
+
+Also due to the fact that both are categorical values.
+
+3.2 Aesthetic mapping
+
+Exercise - 3.3.1
+
+1. What's gone wrong with this code? Why are the points not blue?
+
+ggplot(data = mpg) +   geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+
+You define a color mapping inside the aesthetics. If you wish to change the actual dots to blue, that can be done in as a singular argument.
+
+2. 
 

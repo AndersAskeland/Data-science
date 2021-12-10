@@ -215,21 +215,36 @@ pre code {
 
 
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Cmd+Shift+Enter</em>.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjYXJzKVxuYGBgIn0= -->
-<pre class="r"><code>plot(cars)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Cmd+Option+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Cmd+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
+<p>3.2 First steps</p>
+<p>Exercise - 3.2.4</p>
+<p>1 - Run ggplot(data = mpg). What do you see?</p>
+<p>{r} ggplot2::ggplot(data = ggplot2::mpg)</p>
+<p>We see nothing, as we don’t have any geom’s selected.</p>
+<p>2 - How many rows are in mpg? How many columns?</p>
+<p>{r} ggplot2::mpg</p>
+<p>There is a total of 234 rows and 11 columns.</p>
+<p>3 - What does the drv variable describe? Read the help for ?mpg to find out.</p>
+<p>{r} ?ggplot2::mpg</p>
+<p>“drv” is type of drivetrain.</p>
+<p>4 - Make a scatterplot of hwy vs cyl.</p>
+<p>{r} ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = cyl, y = hwy)) + ggplot2::geom_point()</p>
+<p>5- What happens if you make a scatterplot of class vs drv? Why is the plot not useful?</p>
+<p>{r} ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = class, y = drv)) + ggplot2::geom_point()</p>
+<p>This does not make sense because drive train are not in any way correlated with the type of car. Most types of car have a version with each type of drive train.</p>
+<p>Also due to the fact that both are categorical values.</p>
+<p>3.2 Aesthetic mapping</p>
+<p>Exercise - 3.3.1</p>
+<ol style="list-style-type: decimal">
+<li>What’s gone wrong with this code? Why are the points not blue?</li>
+</ol>
+<p>ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, color = “blue”))</p>
+<p>You define a color mapping inside the aesthetics. If you wish to change the actual dots to blue, that can be done in as a singular argument.</p>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ21kK1NoaWZ0K0VudGVyKi4gCgpgYGB7cn0KcGxvdChjYXJzKQpgYGAKCkFkZCBhIG5ldyBjaHVuayBieSBjbGlja2luZyB0aGUgKkluc2VydCBDaHVuayogYnV0dG9uIG9uIHRoZSB0b29sYmFyIG9yIGJ5IHByZXNzaW5nICpDbWQrT3B0aW9uK0kqLgoKV2hlbiB5b3Ugc2F2ZSB0aGUgbm90ZWJvb2ssIGFuIEhUTUwgZmlsZSBjb250YWluaW5nIHRoZSBjb2RlIGFuZCBvdXRwdXQgd2lsbCBiZSBzYXZlZCBhbG9uZ3NpZGUgaXQgKGNsaWNrIHRoZSAqUHJldmlldyogYnV0dG9uIG9yIHByZXNzICpDbWQrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4gCgpUaGUgcHJldmlldyBzaG93cyB5b3UgYSByZW5kZXJlZCBIVE1MIGNvcHkgb2YgdGhlIGNvbnRlbnRzIG9mIHRoZSBlZGl0b3IuIENvbnNlcXVlbnRseSwgdW5saWtlICpLbml0KiwgKlByZXZpZXcqIGRvZXMgbm90IHJ1biBhbnkgUiBjb2RlIGNodW5rcy4gSW5zdGVhZCwgdGhlIG91dHB1dCBvZiB0aGUgY2h1bmsgd2hlbiBpdCB3YXMgbGFzdCBydW4gaW4gdGhlIGVkaXRvciBpcyBkaXNwbGF5ZWQuCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKMy4yIEZpcnN0IHN0ZXBzCgpFeGVyY2lzZSAtIDMuMi40IAoKMSAtIFJ1biBnZ3Bsb3QoZGF0YSA9IG1wZykuIFdoYXQgZG8geW91IHNlZT8KCntyfQpnZ3Bsb3QyOjpnZ3Bsb3QoZGF0YSA9IGdncGxvdDI6Om1wZykKCldlIHNlZSBub3RoaW5nLCBhcyB3ZSBkb24ndCBoYXZlIGFueSBnZW9tJ3Mgc2VsZWN0ZWQuCgoyIC0gSG93IG1hbnkgcm93cyBhcmUgaW4gbXBnPyBIb3cgbWFueSBjb2x1bW5zPwoKe3J9CmdncGxvdDI6Om1wZwoKVGhlcmUgaXMgYSB0b3RhbCBvZiAyMzQgcm93cyBhbmQgMTEgY29sdW1ucy4KCjMgLSBXaGF0IGRvZXMgdGhlIGRydiB2YXJpYWJsZSBkZXNjcmliZT8gUmVhZCB0aGUgaGVscCBmb3IgP21wZyB0byBmaW5kIG91dC4KCntyfQo/Z2dwbG90Mjo6bXBnCgoiZHJ2IiBpcyB0eXBlIG9mIGRyaXZldHJhaW4uCgo0IC0gTWFrZSBhIHNjYXR0ZXJwbG90IG9mIGh3eSB2cyBjeWwuCgp7cn0KZ2dwbG90Mjo6Z2dwbG90KGRhdGEgPSBnZ3Bsb3QyOjptcGcsIGdncGxvdDI6OmFlcyh4ID0gY3lsLCB5ID0gaHd5KSkgKwogIGdncGxvdDI6Omdlb21fcG9pbnQoKQoKNS0gV2hhdCBoYXBwZW5zIGlmIHlvdSBtYWtlIGEgc2NhdHRlcnBsb3Qgb2YgY2xhc3MgdnMgZHJ2PyBXaHkgaXMgdGhlIHBsb3Qgbm90IHVzZWZ1bD8KCntyfQpnZ3Bsb3QyOjpnZ3Bsb3QoZGF0YSA9IGdncGxvdDI6Om1wZywgZ2dwbG90Mjo6YWVzKHggPSBjbGFzcywgeSAgPSBkcnYpKSArIAogIGdncGxvdDI6Omdlb21fcG9pbnQoKQoKVGhpcyBkb2VzIG5vdCBtYWtlIHNlbnNlIGJlY2F1c2UgZHJpdmUgdHJhaW4gYXJlIG5vdCBpbiBhbnkgd2F5IGNvcnJlbGF0ZWQgd2l0aCB0aGUgdHlwZSBvZiBjYXIuIE1vc3QgdHlwZXMgb2YgY2FyIGhhdmUgYSB2ZXJzaW9uIHdpdGggZWFjaCB0eXBlIG9mIGRyaXZlIHRyYWluLgoKQWxzbyBkdWUgdG8gdGhlIGZhY3QgdGhhdCBib3RoIGFyZSBjYXRlZ29yaWNhbCB2YWx1ZXMuCgozLjIgQWVzdGhldGljIG1hcHBpbmcKCkV4ZXJjaXNlIC0gMy4zLjEKCjEuIFdoYXQncyBnb25lIHdyb25nIHdpdGggdGhpcyBjb2RlPyBXaHkgYXJlIHRoZSBwb2ludHMgbm90IGJsdWU/CgpnZ3Bsb3QoZGF0YSA9IG1wZykgKyAgIGdlb21fcG9pbnQobWFwcGluZyA9IGFlcyh4ID0gZGlzcGwsIHkgPSBod3ksIGNvbG9yID0gImJsdWUiKSkKCllvdSBkZWZpbmUgYSBjb2xvciBtYXBwaW5nIGluc2lkZSB0aGUgYWVzdGhldGljcy4gSWYgeW91IHdpc2ggdG8gY2hhbmdlIHRoZSBhY3R1YWwgZG90cyB0byBibHVlLCB0aGF0IGNhbiBiZSBkb25lIGluIGFzIGEgc2luZ3VsYXIgYXJndW1lbnQuCgoyLiAKCg==</div>
 
 
 
